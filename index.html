@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STARK Career Ready — Deployment Demo</title>
+  <meta name="description" content="A simple STARK Career Ready deployment demo. This version uses a prepared example, not a live AI model." />
+  <style>
+    :root { color-scheme: dark; --bg:#080711; --card:#1b1030; --purple:#b922da; --aqua:#08e4e5; --text:#f9f7ff; --muted:#c7c0db; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+    body::before {content:""; position:fixed; inset:0; z-index:-1; background:radial-gradient(ellipse at 17% 10%,#46206180,transparent 38%),radial-gradient(ellipse at 93% 15%,#005c6780,transparent 34%);pointer-events:none;}
+    main {max-width:1020px; margin:auto; padding:42px 24px 60px;}
+    header {text-align:center; margin-bottom:32px;}
+    h1 {font-size:clamp(34px,5vw,60px); line-height:1.08; margin:0 0 8px; letter-spacing:-.035em; }
+    header p {color:var(--muted); margin:0; font-size:17px;}
+    .tag {display:inline-block; margin-top:16px; padding:8px 13px; font-size:13px; border:1px solid #9e77ff77; border-radius:30px; background:#2a2044; color:#f1e5ff;}
+    .flow {display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:14px; margin:28px 0 30px;}
+    .step {border:1px solid #744395; background:linear-gradient(135deg,#321342,#101525); border-radius:18px; padding:16px 12px; text-align:center; position:relative; box-shadow:0 0 23px #ba20da14;}
+    .step:nth-child(even) {border-color:#087e8e; background:linear-gradient(135deg,#07353e,#171126);}
+    .step:not(:last-child)::after {content:'→'; font-size:23px; position:absolute; right:-18px; top:37%; color:white; z-index:2;}
+    .step strong{display:block;font-size:16px;margin:7px 0 4px;}
+    .step small {font-size:12px;color:#d2cadd;}
+    .emoji{font-size:32px;display:block;}
+    .panels{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+    .panel{background:linear-gradient(145deg,#7c129e,#a921c7);border:1px solid #da93ed;border-radius:21px;padding:24px;min-height:350px;box-shadow:0 20px 45px #0005;}
+    .panel.result{background:linear-gradient(145deg,#092f41,#3a145c); border-color:#00d8db;}
+    h2 {font-size:21px;margin:0 0 20px;}
+    label{display:block; font-weight:650; margin:12px 0 6px; font-size:14px;}
+    textarea{width:100%; resize:vertical; min-height:72px; border:1px solid #ece4fa67; background:#160f2580; color:white; border-radius:10px; padding:11px 12px; font:inherit; line-height:1.5;}
+    textarea:focus-visible,button:focus-visible{outline:3px solid var(--aqua);outline-offset:3px;}
+    button {background:var(--aqua); color:#081217; font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 17px;cursor:pointer;margin-top:14px;}
+    button.secondary {background:transparent;border:1px solid #8de4e5;color:#fff;}
+    button:hover {filter:brightness(1.07);}
+    .output{background:#ffffff13; border:1px solid #ffffff44; padding:16px; border-radius:13px; line-height:1.65; min-height:105px;}
+    .small{font-size:13px;color:#ede1f2;line-height:1.5;}
+    .foot {text-align:center; margin-top:28px; color:var(--muted); font-size:13px;}
+    @media(max-width:700px){.flow{grid-template-columns:repeat(2,1fr)}.step:nth-child(2)::after{display:none}.panels{grid-template-columns:1fr}.panel{min-height:auto} main{padding:28px 15px 48px} }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>STARK CAREER READY</h1>
+    <p>How Our Application Works</p>
+    <span class="tag">Deployment practice • Simulated AI response • No API key needed</span>
+  </header>
+  <section class="flow" aria-label="Four-step workflow">
+    <div class="step"><span class="emoji" aria-hidden="true">📦</span><strong>GitHub</strong><small>Stores our app's code</small></div>
+    <div class="step"><span class="emoji" aria-hidden="true">🌐</span><strong>Vercel</strong><small>Deploys the website</small></div>
+    <div class="step"><span class="emoji" aria-hidden="true">🌉</span><strong>API</strong><small>Connects the app to AI when configured</small></div>
+    <div class="step"><span class="emoji" aria-hidden="true">🧠</span><strong>AI Model</strong><small>Would generate a CV bullet in the live version</small></div>
+  </section>
+  <section class="panels" aria-label="STARK sample CV bullet workflow">
+    <div class="panel">
+      <h2>Student Input in STARK</h2>
+      <label for="job">Job advertisement</label>
+      <textarea id="job">Specialist, Data Analytics or Data Visualization/Graphics at Xelay Acumen, Taipei. The role involves analyzing data and presenting results.</textarea>
+      <label for="exp">My experience</label>
+      <textarea id="exp">I analyzed data for my Research Methods course using SPSS and Excel.</textarea>
+      <label for="request">My request</label>
+      <textarea id="request">Act as an HR professional and help me rewrite my experience into one CV bullet point.</textarea>
+      <button id="generate" type="button">Show sample CV bullet →</button>
+      <p class="small">This practice demo shows a prepared example; it does not send your text to an AI.</p>
+    </div>
+    <div class="panel result">
+      <h2>Example Response in STARK</h2>
+      <p class="small">Research Methodology &amp; Data Analysis Project</p>
+      <div class="output" id="output" aria-live="polite">Click “Show sample CV bullet” to see an example response.</div>
+      <button id="copy" type="button" class="secondary">Copy sample bullet</button>
+      <p class="small" id="status" role="status">Not connected to a real AI model. A live API requires extra setup.</p>
+    </div>
+  </section>
+  <p class="foot">Created for a STARK Career Ready deployment demonstration. Do not present the simulated answer as a live AI result.</p>
+</main>
+<script>
+  const preparedBullet = 'Analyzed research data for a Research Methods course using SPSS and Microsoft Excel.';
+  const output = document.getElementById('output');
+  document.getElementById('generate').addEventListener('click', () => {
+    output.textContent = preparedBullet;
+    document.getElementById('status').textContent = 'Prepared example displayed. This is not a live AI response.';
+  });
+  document.getElementById('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(preparedBullet); document.getElementById('status').textContent = 'Sample bullet copied.'; }
+    catch { document.getElementById('status').textContent = 'Select the bullet and copy it manually.'; }
+  });
+</script>
+</body>
+</html>
